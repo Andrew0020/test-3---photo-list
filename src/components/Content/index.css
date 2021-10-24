@@ -1,0 +1,26 @@
+.content {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.item {
+    margin-bottom: 30px;
+    min-width: 30%;
+    overflow: hidden;
+}
+
+.item:hover {
+    cursor: pointer;
+}
+
+.item img {
+    min-height: 200px;
+    min-width: 300px;
+    transition: 1s;
+}
+
+.item:hover img {
+    transform: scale(0.9);
+}
