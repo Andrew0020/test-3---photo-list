@@ -41,7 +41,7 @@
     width: 100%;
 }
 
-input {
+.input {
     background: #FFFFFF;
     border: 1px solid #CCCCCC;
     border-radius: 3px;
@@ -50,6 +50,10 @@ input {
     margin-top: 17px;
     padding: 8px 11px;
     width: 100%;
+}
+
+.input-error {
+    border: 1px solid red;
 }
 
 .add-comment {

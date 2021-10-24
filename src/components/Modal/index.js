@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import cn from 'classnames';
 
 import noImage from '../../assets/img/no-image.png';
 import './index.css';
@@ -10,6 +11,10 @@ const Modal = ({
 }) => {
     const [imgSrc, setImgSrc] = useState(noImage);
     const [comments, setComments] = useState([]);
+    const [isInputNameError, setIsInputNameError] = useState(false);
+    const [isInputCommentError, setIsInputCommentError] = useState(false);
+    const [inputNameValue, setInputNameValue] = useState('');
+    const [inputCommentValue, setInputCommentValue] = useState('');
 
     useEffect(() => {
         // получения большого изображения и списка комментариев
@@ -35,40 +40,51 @@ const Modal = ({
 
     if (!visible) return null;
 
+    const onChangeInputName = (e) => {
+        setIsInputNameError(false);
+        setInputNameValue(e.target.value);
+    }
+
+    const onChangeInputComment = (e) => {
+        setIsInputCommentError(false);
+        setInputCommentValue(e.target.value);
+    }
+
     const addComment = () => {
-        const name = document.getElementById('name').value;
-        const comment = document.getElementById('comment').value;
+        if (!Boolean(inputNameValue)) {
+            setIsInputNameError(true);
+        }
 
-        document.getElementById('name').value = '';
-        document.getElementById('comment').value = '';
+        if (!Boolean(inputCommentValue)) {
+            setIsInputCommentError(true);
+        }
 
-        // добавление комментария (204 – OK, комментарий не сохраняется)
-        fetch(`https://boiling-refuge-66454.herokuapp.com/images/${imageId}/comments`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            // body: JSON.stringify({
-            //     id: data.id,
-            //     text: 'Крутая фотка111',
-            //     date: 1578054737927
-            // })
-            body: JSON.stringify({
-                name: name,
-                comment: comment
+        if (Boolean(inputNameValue) && Boolean(inputCommentValue)) {
+            // добавление комментария (204 – OK, комментарий не сохраняется)
+            fetch(`https://boiling-refuge-66454.herokuapp.com/images/${imageId}/comments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify({
+                    name: inputNameValue,
+                    comment: inputCommentValue
+                })
             })
-        })
-            .then((response) => {
-                console.log(response.status + ': ' + response.statusText);
+                .then((response) => {
+                    console.log(response.status + ': ' + response.statusText);
 
-                if (response.status === 204 ) {
-                    setComments((comments) => [...comments, {
-                        id: Date.now(),
-                        text: comment,
-                        date: Date.now(),
-                    }]);
-                }
-            });
+                    if (response.status === 204 ) {
+                        setComments((comments) => [...comments, {
+                            id: Date.now(),
+                            text: inputCommentValue,
+                            date: Date.now(),
+                        }]);
+                        setInputNameValue('');
+                        setInputCommentValue('');
+                    }
+                });
+        }
     }
 
     return (
@@ -77,8 +93,26 @@ const Modal = ({
             <div className="modal">
                 <div className="photo-add-comment">
                     <img className="img" src={imgSrc} alt="" />
-                    <input id="name" placeholder="Ваше имя" />
-                    <input id="comment" placeholder="Ваш комментарий" />
+                    <input
+                        id="name"
+                        className={cn({
+                            'input': true,
+                            'input-error': isInputNameError
+                        })}
+                        placeholder="Ваше имя"
+                        onChange={onChangeInputName}
+                        value={inputNameValue}
+                    />
+                    <input
+                        id="comment"
+                        className={cn({
+                            'input': true,
+                            'input-error': isInputCommentError
+                        })}
+                        placeholder="Ваш комментарий"
+                        onChange={onChangeInputComment}
+                        value={inputCommentValue}
+                    />
                     <div className="add-comment" onClick={addComment}>Оставить комментарий</div>
                 </div>
 
