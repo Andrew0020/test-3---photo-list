@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../Modal';
 
+import loading from '../../assets/img/loading_spinner.gif';
 import './index.css';
 
 const Content = () => {
   const [imageList, setImageList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [isModal, setModal] = useState(false);
   const [imageId, setImageId] = useState(null);
 
@@ -16,6 +18,7 @@ const Content = () => {
       })
       .then((data) => {
         setImageList(data);
+        setIsLoading(false);
       });
 
     // на случай, если отвалится api (для тестового задания)
@@ -41,12 +44,6 @@ const Content = () => {
   return (
     <React.Fragment>
       <div className="content">
-        <Modal
-          visible={isModal}
-          onClose={onClose}
-          imageId={imageId}
-        />
-
         { imageList.map((item) => {
           return (
             <div className="item" key={item.id} onClick={handleClick}>
@@ -54,14 +51,19 @@ const Content = () => {
             </div>
           );
         })}
+
+        {isLoading && (
+          <div className="loading">
+            <img src={loading} alt="loading" />
+          </div>
+        )}
       </div>
 
-      <div>
-        остаётся
-        <ol>
-          <li>Вёрстка доделать и адаптив</li>
-        </ol>
-      </div>
+      <Modal
+        visible={isModal}
+        onClose={onClose}
+        imageId={imageId}
+      />
     </React.Fragment>
   );
 }

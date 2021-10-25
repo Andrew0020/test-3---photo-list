@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 
-import noImage from '../../assets/img/no-image.png';
+// import noImage from '../../assets/img/no-image.png';
+import loading from '../../assets/img/loading_spinner.gif';
 import './index.css';
 
 const Modal = ({
@@ -9,7 +10,8 @@ const Modal = ({
     onClose,
     imageId,
 }) => {
-    const [imgSrc, setImgSrc] = useState(noImage);
+    const [imgSrc, setImgSrc] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
     const [comments, setComments] = useState([]);
     const [isInputNameError, setIsInputNameError] = useState(false);
     const [isInputCommentError, setIsInputCommentError] = useState(false);
@@ -25,9 +27,14 @@ const Modal = ({
             .then((data) => {
                 setImgSrc(data.url);
                 setComments(data.comments);
+                setIsLoading(false);
             });
 
-        return setImgSrc(noImage);
+        return () => {
+            setImgSrc(null);
+            setComments([]);
+            setIsLoading(true);
+        }
 
         // на случай, если отвалится api (для тестового задания)
         // const imageId237 = {"id":237,"url":"https://picsum.photos/id/237/600/400","comments":[{"id":153,"text":"Крутая фотка","date":1578054737927}]};
@@ -91,8 +98,33 @@ const Modal = ({
         <React.Fragment>
             <div className="substrate" onClick={onClose} />
             <div className="modal">
-                <div className="photo-add-comment">
+                <div className="photo">
                     <img className="img" src={imgSrc} alt="" />
+                    {isLoading && (
+                        <img className="loadingModal" src={loading} alt="loading" />
+                    )}
+                </div>
+
+                <div className="comments">
+                    { comments.length > 0
+                        ? comments.map((comment) => {
+                            return (
+                                <div className="comment" key={comment.id}>
+                                    <div className="date">{comment.date && new Date(comment.date).toLocaleDateString()}</div>
+                                    <div>{comment.text}</div>
+                                </div>
+                            );
+                        })
+                        : (
+                            <div className="comment">
+                                <div className="date">xx.xx.xx</div>
+                                <div>Здесь будет Ваш комментарий</div>
+                            </div>
+                        )
+                    }
+                </div>
+
+                <div className="add-comment">
                     <input
                         id="name"
                         className={cn({
@@ -113,26 +145,7 @@ const Modal = ({
                         onChange={onChangeInputComment}
                         value={inputCommentValue}
                     />
-                    <div className="add-comment" onClick={addComment}>Оставить комментарий</div>
-                </div>
-
-                <div className="comments">
-                    { comments.length > 0
-                        ? comments.map((comment) => {
-                            return (
-                                <div className="comment" key={comment.id}>
-                                    <div className="date">{comment.date && new Date(comment.date).toLocaleDateString()}</div>
-                                    <div>{comment.text}</div>
-                                </div>
-                            );
-                        })
-                        : (
-                            <div className="comment">
-                                <div className="date">xx.xx.xx</div>
-                                <div>Здесь будет Ваш комментарий</div>
-                            </div>
-                        )
-                    }
+                    <div className="add-comment-button" onClick={addComment}>Оставить комментарий</div>
                 </div>
 
                 <div className="close" onClick={onClose} />
