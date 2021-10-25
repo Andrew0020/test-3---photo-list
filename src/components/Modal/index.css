@@ -134,6 +134,7 @@
 
 @media (min-width: 1200px) {
     .comments {
+        margin: 0;
         padding-left: 14px;
     }
 }
