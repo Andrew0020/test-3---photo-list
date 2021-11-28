@@ -1,23 +1,23 @@
-# Адаптивная страница со списком фотографий
+# Responsive page with images list
 
 https://andrew0020.github.io/test-3---photo-list/
 
-Необходимо сверстать адаптивную страницу со списком фотографий.
+It is necessary to create a responsive page with a list of images
 
-При клике на фотографии открывается модальное окно с фотографией, списком комментариев и формой добавления комментариев.
+When you click on an image, a modal window opens with an image, a list of comments and a form for adding comments
 
-Список ручек:
-- GET https://boiling-refuge-66454.herokuapp.com/images - получение списка фотографий
-- GET https://boiling-refuge-66454.herokuapp.com/images/:imageId - получения большого изображения и списка комментариев
-- POST https://boiling-refuge-66454.herokuapp.com/images/:imageId/comments - добавление комментария (204 – OK, комментарий не сохраняется)
+API:
+- GET https://boiling-refuge-66454.herokuapp.com/images - get a list of images
+- GET https://boiling-refuge-66454.herokuapp.com/images/:imageId - getting a large image and a list of comments
+- POST https://boiling-refuge-66454.herokuapp.com/images/:imageId/comments - adding a comment (204 - OK, the comment is not saved)
 
-Дизайн можно найти тут https://www.figma.com/file/3VP0QDK3kjdfbkj8TRrtsx/Test-task?node-id=0%3A1
+The design can be found here https://www.figma.com/file/3VP0QDK3kjdfbkj8TRrtsx/Test-task?node-id=0%3A1
 
-Мы оценим если:
-- приложение будет работать локально после npm i && npm run start;
-- приложение написано на React;
-- не используются внешние компоненты, например, модальное окно;
-- учтен UX.
+We will evaluate if:
+- the application will run locally after npm i && npm run start
+- the application is written in React
+- no external components are used, for example, a modal window
+- UX taken into account
 
 ---------------
 
